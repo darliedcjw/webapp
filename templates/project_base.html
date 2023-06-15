@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block project_title %}{% endblock %}</title>
+    {% block project_scripts %}{% endblock %}
+    {% block project_styles %}{% endblock %}
+</head>
+
+<body>
+    <!-- Title -->
+    <div id="title">
+        {% block project_header %}{% endblock %}
+    </div>
+    
+    <hr>
+
+    <!-- Description -->
+    <div id="description">
+        <h2>Description</h2>
+        {% block project_description %}{% endblock %}
+    </div>
+
+    <!-- Project -->
+    <div id="project">
+        {% block project %}{% endblock %}
+    </div>
+</body>
+
+</html>

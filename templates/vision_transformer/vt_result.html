@@ -1,0 +1,44 @@
+{% extends 'project_base.html' %}
+
+<!-- Scripts -->
+{% block project_scripts %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='draw.js') }}"></script>
+{% endblock %}
+
+<!-- Styles -->
+{% block project_styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles_draw.css') }}">
+{% endblock %}
+
+<!-- Project Title -->
+{% block project_title %}
+Vision Transformer
+{% endblock %}
+
+<!-- Project Header -->
+{% block project_header %}
+Vision Transformer
+{% endblock %}
+
+<!-- Project Description -->
+{% block project_description %}
+This project demostrates the prediction of numbers that is being drawn on the canvas.
+<br>
+Please use the canvas to draw a number.
+{% endblock %}
+
+<!-- Project -->
+{% block project %}
+
+<h2>Results</h2>
+
+<div id="result">
+    {%if prediction%}
+    Predicted to be {{ prediction }} !
+    {%else%}
+    Nothing to predict !
+    {%endif%}
+</div>
+
+{% endblock %}

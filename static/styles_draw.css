@@ -1,0 +1,42 @@
+#title {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 200%;
+    font-weight: bold;
+    display: block;
+    margin-left: 5%;
+    margin-right: 5%;
+    text-align: left;
+}
+
+
+#description {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: block;
+    margin-left: 5%;
+    margin-right: 5%;
+    text-align: left;
+}
+
+#project {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: block;
+    margin-left: 5%;
+    margin-top: 5%;
+}
+
+#canvas {
+    border: 2px;
+    border-style: solid;
+    border-color: rgb(0, 0, 0);
+    display: block;
+}
+
+#predict {
+    display: block;
+    margin-top: 10px;
+}
+
+#result {
+    display: block;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
