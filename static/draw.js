@@ -4,7 +4,7 @@ var clickX = new Array();
 var clickY = new Array();
 var clickDrag = new Array();
 var paint = false;
-var curColor = "#FF5733";
+var curColor = "#ffffff";
 
 
 /**
@@ -49,7 +49,7 @@ function addClick(x, y, dragging) {
     - Clear the canvas and redraw
 **/
 function redraw() {
-    
+
     context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
     context.strokeStyle = curColor;
     context.lineJoin = "round";
