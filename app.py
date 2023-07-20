@@ -1,13 +1,19 @@
-from flask import Flask, render_template, request
-import base64
+from flask import Flask, render_template, request, redirect
+import os
 import numpy as np
 import cv2
 import torch
-from model.vit import ViT
+from torchvision import transforms
+from torchvision.datasets import MNIST
+from ResNet152.model import ResNet152
+from werkzeug.utils import secure_filename
+
 
 init_Base64=21
 
+
 app = Flask(__name__)
+app.config['upload_folder'] = 'upload'
 
 @app.route("/")
 def home():
@@ -16,20 +22,22 @@ def home():
     
     sub_description = "This page contains some of my past projects."
     
-    projects=["Vision Transformer"]
+    projects=["MNIST Prediction"]
 
     return render_template('layout.html',
                            main_description=main_description,
                            sub_description=sub_description,
                            projects=projects)
 
-@app.route("/vision_transformer")
-def vision_transformer():
-    return render_template('vision_transformer/vt_home.html')
+@app.route("/mnist")
+def mnist():
+    return render_template('mnist/mnist_home.html')
 
-@app.route("/predict", methods=["POST"])
-def predict():
+@app.route("/mnist_predict")
+def mnist_predict():
 
+    device = torch.device('cuda')
+    
     class_list = {
         0:"0",
         1:"1",
@@ -42,28 +50,41 @@ def predict():
         8:"8",
         9:"9"
         }
-
-    file = request.form['url']
-    file = file[init_Base64:]
-    file_decoded = base64.b64decode(file)
-    image = np.asarray(bytearray(file_decoded), dtype="uint8")
-    image = cv2.imdecode(image, cv2.IMREAD_GRAYSCALE)
     
-    #Resizing and reshaping to keep the ratio.
-    resized_image = cv2.resize(image, (28,28), interpolation = cv2.INTER_AREA)
-    vect = np.asarray(resized_image, dtype="uint8")
-    vect = vect.reshape(1, 1, 28, 28).astype('float32')
-    vect = torch.tensor(vect)
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+    ])
 
-    device = torch.device('cuda')
-    weights_path = "model/weights/20230621_134642/best_val_acc0.84.pth"
-    vit_model = ViT(image_res=(1, 28, 28), n_patches=7, n_blocks=2, hidden_d=8, n_heads=2, out_d=10).to(device)
-    vit_model.load_state_dict(torch.load(weights_path, map_location=device))
+    ds = MNIST(root="ResNet152/datasets", train=False, transform=transform)
+    rand = torch.randint(low=0, high=100, size=(1,)).item()
+    image = ds[rand][0]
+    label = ds[rand][1]
 
-    out = vit_model(vect)
+    if not os.path.exists('static/examples'):
+        os.makedirs('static/examples')
+    
+    save_path = os.path.join('static/examples', '{}.jpeg'.format(rand))
+    image_save = image.numpy().transpose(1, 2, 0) * 255
+    image_save = cv2.resize(image_save, [128, 128])
+    print(image_save.shape)
+    cv2.imwrite(save_path, image_save)
+
+    image = image.unsqueeze(dim=0).repeat(1, 3, 1, 1).to(device)
+
+    weights_path = "ResNet152/logs/mnist/checkpoint_best_0.7509_0.9510.pth"
+    checkpoint = torch.load(weights_path, map_location=device)
+
+    resnet152 = ResNet152(in_channels=3, num_classes=10).to(device)
+    resnet152.load_state_dict(checkpoint['model'])
+    
+    resnet152.eval()
+    # vit_model = ViT(image_res=(1, 28, 28), n_patches=7, n_blocks=2, hidden_d=8, n_heads=2, out_d=10).to(device)
+    # vit_model.load_state_dict(torch.load(weights_path, map_location=device))
+
+    out = resnet152(image)
     prediction = class_list[torch.argmax(out).item()]
 
-    return render_template('vision_transformer/vt_result.html', prediction=prediction)
+    return render_template('mnist/resnet_result.html', prediction=prediction, label=label, save_path=save_path)
 
 
 if __name__ == "__main__":

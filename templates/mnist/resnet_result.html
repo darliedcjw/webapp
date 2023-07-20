@@ -1,0 +1,51 @@
+{% extends 'project_base.html' %}
+
+<!-- Scripts -->
+{% block project_scripts %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+{% endblock %}
+
+<!-- Styles -->
+{% block project_styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles_draw.css') }}">
+{% endblock %}
+
+<!-- Project Title -->
+{% block project_title %}
+MNIST Prediction
+{% endblock %}
+
+<!-- Project Header -->
+{% block project_header %}
+MNIST Prediction (ResNet152)
+{% endblock %}
+
+<!-- Project Description -->
+{% block project_description %}
+The purpose of this project is to facilitate my understanding of Flask through deployment of two different classification models (ResNet152, Vision Transformer) that is trained on MNIST.
+{% endblock %}
+
+<!-- Project -->
+{% block project %}
+
+<h2>ResNet152 Results</h2>
+
+<div id="imageContainer">
+    {%if prediction%}
+    <img src="{{ save_path }}" alt="Example Image">
+    {%else%}
+    Nothing to display!
+    {%endif%}
+</div>
+
+<br>
+
+<div id="result">
+    {%if prediction%}
+    Predicted to be {{ prediction }} and groundtruth is {{ label }}!
+    {%else%}
+    Nothing to predict!
+    {%endif%}
+</div>
+
+{% endblock %}

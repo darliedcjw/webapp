@@ -3,7 +3,7 @@
 <!-- Scripts -->
 {% block project_scripts %}
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='draw.js') }}"></script>
+<!--TO BE CONTINUE-->
 {% endblock %}
 
 <!-- Styles -->
@@ -13,32 +13,23 @@
 
 <!-- Project Title -->
 {% block project_title %}
-Vision Transformer
+MNIST Prediction
 {% endblock %}
 
 <!-- Project Header -->
 {% block project_header %}
-Vision Transformer
+MNIST Prediction (ResNet152 / Vision Transformer)
 {% endblock %}
 
 <!-- Project Description -->
 {% block project_description %}
-This project demostrates the prediction of numbers that is being drawn on the canvas.
+The purpose of this project is to facilitate my understanding of Flask through deployment of two different classification models (ResNet152, Vision Transformer) that is trained on MNIST.
 <br>
-Please use the canvas to draw a number.
+<br>
+Click the "Predict" button for random sampling prediction.
 {% endblock %}
 
 <!-- Project -->
 {% block project %}
-
-<h2>Results</h2>
-
-<div id="result">
-    {%if prediction%}
-    Predicted to be {{ prediction }} !
-    {%else%}
-    Nothing to predict !
-    {%endif%}
-</div>
-
+<a href="{{ url_for('mnist_predict') }}"><button id="ResNet152 Predict">Predict</button>
 {% endblock %}

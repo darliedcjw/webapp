@@ -24,13 +24,6 @@
     margin-top: 5%;
 }
 
-#canvas {
-    border: 2px;
-    border-style: solid;
-    border-color: rgb(0, 0, 0);
-    background-color: black;
-    display: block;
-}
 
 #predict {
     display: block;
